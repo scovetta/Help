@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+	<title>{{page_title|default:"Help"}}</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+	<meta content="index,follow" name="robots" />
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	<link href="/static/ios/images/ios/homescreen.gif" rel="apple-touch-icon" />
+	<meta content="minimum-scale=1.0, width=device-width, maximum-scale=0.6667, user-scalable=no" name="viewport" />
+	
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="{{STATIC_URL}}js/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      .sidebar-nav {
+        padding: 9px 0;
+      }
+      .no_bottom_margin * { margin-bottom: 0 !important; }
+      
+      #messages:hover span#messages_num {
+		  color: #ff6666 !important;
+		  text-decoration: none;
+	  }
+	  .rounded {
+	  	  -webkit-border-radius: 6px;
+		  -moz-border-radius: 6px;
+		  border-radius: 6px;
+	  }
+	  .pointer {
+	  	cursor: hand;
+	  	cursor: pointer;
+	  }
+    </style>
+    <link href="{{STATIC_URL}}js/bootstrap-responsive.css" rel="stylesheet">
+    <link href="{{STATIC_URL}}js/jquery.autocomplete.css" rel="stylesheet">
+    
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="{{STATIC_URL}}images/favicon.ico">
+    <link rel="apple-touch-icon" href="{{STATIC_URL}}images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="{{STATIC_URL}}images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="{{STATIC_URL}}images/apple-touch-icon-114x114.png">
+	<link rel="apple-touch-startup-image" href="{{STATIC_URL}}images/apple-splash-ipad-landscape.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)" />
+	<link rel="apple-touch-startup-image" href="{{STATIC_URL}}images/apple-splash-ipad-portrait.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)" />
+	<link rel="apple-touch-startup-image" href="{{STATIC_URL}}images/apple-splash-iphone.png" media="screen and (max-device-width: 320)" />
+	
+	<script type='text/javascript'>window.q=[];window.$=function(f){q.push(f)}</script>
+    {% block header %}{% endblock %}
+<style>
+	@media (max-width:480px) {
+		.hero-unit {
+		  padding: 10px;
+		  margin-bottom: 50px;
+		  background-color: #f5f5f5;
+		  -webkit-border-radius: 6px;
+		  -moz-border-radius: 6px;
+		  border-radius: 6px;
+		}
+		.hero-unit h1 {
+		  margin-bottom: 0;
+		  font-size: 30px;
+		  line-height: 1;
+		  letter-spacing: -1px;
+		}
+		.hero-unit p {
+		  font-size: 12px;
+		  font-weight: 200;
+		  line-height: 17px;
+		}
+		.hero-unit .application-icon {
+			display: none;
+		}
+	}
+	.hero-unit {
+		margin-bottom: 10px;
+	}
+	.hero-unit .application-icon {
+		margin-top: -10px;
+		max-width: 128px;
+	}
+</style>
+  </head>
+
+  <body>
+  {% block fullbody %}
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/">Grand Central</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+			  <li class="active">
+			    <a href="/home">Home</a>
+			  </li>
+			  {% if user.username %}
+				  <li><a href="/store">Store</a></li>
+				  <li><a href="/settings">Settings</a></li>
+			  {% endif %}
+			</ul>
+
+			{% if user.username %}
+				<ul class="nav pull-right">
+					<li><a href="/auth/logout">Logout</a></li>
+				</ul>
+				<form id="main_search" class="navbar-search pull-right">
+				  <input type="text" class="search-query" placeholder="Search...">
+				</form>
+				<p class="navbar-text pull-right">Welcome, <a href="/settings/profile/{{user.username|default:''}}">{{user.first_name|default:'Unknown User'}}</a>&nbsp;&nbsp;&nbsp;</p>
+				
+				<ul class="nav pull-right">
+					<li><a id="messages" href="#"><span id="messages_num" style="color:darkred;font-weight:bold;"></span> <span id="messages_label" style="opacity:0.2">Messages</span></a></li>
+				</ul>
+			{% else %}
+				<ul class="nav pull-right">
+					<li><a href="/auth/login">Login</a></li>
+				</ul>	
+			{% endif %}
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    
+    <div class="container-fluid">
+      <div class="row-fluid hide">
+        {% block sidebar %}
+        {% endblock %}
+                
+        {% block content %}
+        {% endblock %}
+        
+        {% block sidebar-right %}
+        {% endblock %}
+      </div><!--/row-->
+
+      <footer>
+        {% block footer %}{% endblock %}
+      </footer>
+    </div><!--/.fluid-container-->
+
+<div id="confirm" class="modal hide fade">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">&times;</a>
+    <h3 id="confirm_header"></h3>
+  </div>
+  <div class="modal-body">
+    <img id="confirm_icon" class="pull-right" style="width:64px;padding-right:15px;"/>
+    <p id="confirm_body"></p>
+    <div style="clear:both;"></div>
+  </div>
+  <div class="modal-footer">
+    <a id="confirm_yes" href="#" class="btn btn-primary">Yes, Continue</a>
+    <a id="confirm_no" href="#" class="btn" data-dismiss="modal">No, Close</a>
+  </div>
+</div>
+
+<div id="messages_popup" class="modal hide fade">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">&times;</a>
+    <h3 id="messages_title">Messages - Inbox</h3>
+  </div>
+  <div class="modal-body">
+    <table class="table table-condensed table-striped table-bordered">
+        <thead>
+            <tr>
+                <th id="msg_archive_column" style="text-align:center"><i class="icon-remove"></i></th>
+                <th>From</th>
+                <th>Message</th>
+                <th>Sent</th>
+            </tr>
+        </thead>
+        <tbody id="messages_table_body">
+        </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal">Close</a>
+    <a id="toggle_archives" href="#" class="btn btn-success">Archives</a>
+    <a id="archive_all" href="#" class="btn btn-success">Archive All</a>
+  </div>
+</div>
+
+<div id="popup-feedback" class="modal hide fade">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">&times;</a>
+    <h3>Feedback</h3>
+  </div>
+  <div class="modal-body">
+    <p>Your feedback is most appreciated, and can be submitted below. You can also submit feedback via
+    e-mail to <a href="mailto:michael.scovetta@cbs.com">michael.scovetta@cbs.com</a>.</p>
+    
+    <form id="popup-feedback-form">
+    	<input type="hidden" id="popup-feedback-component" name="component" value="" />
+    	<textarea placeholder="Feedback..." name="feedback" id="popup-feedback-text"></textarea>
+    </form>
+    <div style="clear:both;"></div>
+  </div>
+  <div class="modal-footer">
+    <a id="popup-feedback-submit" href="#" class="btn btn-primary">Submit</a>
+    <a id="popup-feedback-cancel" href="#" class="btn" data-dismiss="modal">Cancel</a>
+  </div>
+</div>
+
+
+<script language="javascript">
+	function confirm_clean(title, message, yes, no) {
+		   $('#confirm_header').text(title);
+		   $('#confirm_body').text(message);
+		   $('#confirm_yes').click(yes);
+		   if (no != null) $('#confirm_no',click(no));
+	}
+	function archive_message(elt) {
+	    id = $(elt).parent().parent().attr("data-id");
+	    $.getJSON('/api/1/messages/' + id + '/archive/', function(data) {
+	    	check_messages();
+	    	$('#messages_table_body tr').popover('hide');
+	    });
+	}
+	function show_feedback(component) {
+		if (component) {
+			$('#popup-feedback-component').attr('value', component);
+		}
+		$('#popup-feedback').modal();
+	}
+	if (typeof String.prototype.startsWith != 'function') {
+			String.prototype.startsWith = function (str){
+			return this.slice(0, str.length) == str;
+		};
+	}
+	if (typeof String.prototype.endsWith != 'function') {
+			String.prototype.endsWith = function (str){
+			return this.slice(-str.length) == str;
+		};
+	}
+    function check_messages() {
+        url = $("#toggle_archives").data('msg_showing_archives') == 'true' ? '/api/1/messages/archived/' : '/api/1/messages/';
+        msg = $.getJSON(url, function(data) {
+            num_msgs = 0;
+            try {
+                $('#messages_table_body tr').remove();
+                $.each(data, function(i, item) {
+                    i_id = item.id;
+                    i_from = item.from;
+                    i_msg = "MSG: " + item.message;
+                    i_subject = item.subject
+                    i_date = item.sent;
+                    archive = "";
+                    if ($("#toggle_archives").data('msg_showing_archives') != 'true') {
+                    	archive = "<td style=\"text-align:center\"><a href=\"#\" onclick=\"archive_message(this)\"><i class=\"icon-ok-sign\"></i></a></td>";
+                    	$("#msg_archive_column").show();
+                    } else {
+                    	$("#msg_archive_column").hide();
+                    }
+                    $('#messages_table_body').append("<tr data-content=\"" + i_msg + "\" data-id=\"" + i_id + "\">" + archive + "<td>" + i_from + "</td><td>" + i_subject + "</td><td>" + i_date + " ago</td></tr>");
+                    $('#messages_table_body tr').popover({'placement':'bottom', 'title': i_subject, 'delay':{'show':400,'hide':100}});
+                    num_msgs++;
+                });
+            } catch(e) {
+                console.log("Error creating messages table: " + e);
+                return;
+            }
+            if (num_msgs > 0) {
+                $('#messages').css('font-weight', 'bold');
+                $('#messages_num').text(num_msgs);
+                $('#messages_label').css('opacity', '1.0');
+                
+            }
+        });
+    }
+	$(function() {
+	    $('.row-fluid').fadeIn();
+		$('#messages').click(function() {
+			$('#messages_popup').modal();
+		});
+	    $('#toggle_archives').click(function() {
+	    	if ($(this).data('msg_showing_archives') == null ||
+	    		$(this).data('msg_showing_archives') == 'false') {
+	    		$(this).data('msg_showing_archives', 'true');
+	    		$('#messages_title').text('Messages - Archives');
+	    		$(this).text('Inbox');
+	    	} else {
+	    		$(this).data('msg_showing_archives', 'false');
+	    		$(this).text('Archives');
+	             $('#messages_title').text('Messages - Inbox');
+	    	}
+	    	    
+	    	check_messages();
+	    	return
+	    });
+	    $('#archive_all').click(function() {
+	    	$.getJSON('/api/1/messages/all/archive/', function(data) {
+	    		check_messages();
+	    		$('#messages_table_body tr').popover('hide');
+	    	});
+	    });
+	    $('#popup-feedback-submit').click(function() {
+			var component = $('#popup-feedback-component').val();
+			var feedback = $('#popup-feedback-text').val();
+			data = {'component': component,
+					'feedback': feedback};
+			
+			$.ajax({
+	            type: 'POST',
+	            url: '/api/feedback/submit/',
+	            headers: { 'X-CSRFToken': $.cookie('csrftoken') },
+	            dataType: 'json',
+	            success: function(data) {
+	   				$('#popup-feedback-text').val('');
+	   				alert('Thank you for your feedback!');
+	   				$('#popup-feedback-cancel').click();
+	            },
+	            error: function(data, error) {
+	                alert('An error has occurred:' + data);
+	                console.log(data);
+	                console.log(error);
+	            }
+	        });
+		});
+	    $('.sidebar-nav a').each(function(i, elt) {
+	        if (document.location.pathname.startsWith($(elt).attr('href'))) {
+	            $('.sidebar-nav a').removeClass('active');
+	            $('.sidebar-nav li').removeClass('active');
+	            $(elt).addClass('active');
+	            $(elt).parent().addClass('active');
+	        }
+	    });
+
+		setInterval(check_messages, 60000);
+		check_messages();
+	});
+</script>
+ 	<!-- Fix links for mobile app view -->
+    <script type="text/javascript">
+        (function(document,navigator,standalone) {
+            // prevents links from apps from oppening in mobile safari
+            // this javascript must be the first script in your <head>
+            if ((standalone in navigator) && navigator[standalone]) {
+                var curnode, location=document.location, stop=/^(a|html)$/i;
+                document.addEventListener('click', function(e) {
+                    curnode=e.target;
+                    while (!(stop).test(curnode.nodeName)) {
+                        curnode=curnode.parentNode;
+                    }
+                    // Condidions to do this only on links to your own app
+                    // if you want all links, use if('href' in curnode) instead.
+                    if('href' in curnode && ( curnode.href.indexOf('http') || ~curnode.href.indexOf(location.host) ) ) {
+                        e.preventDefault();
+                        location.href = curnode.href;
+                    }
+                },false);
+            }
+        })(document,window.navigator,'standalone');
+    </script>
+	{% endblock %}
+	<script type="text/javascript" src="{{STATIC_URL}}js/jquery-1.7.1.min.js"></script>
+	<script type="text/javascript">$.each(q,function(i,f){$(f)})</script>
+    <script type="text/javascript" src="{{STATIC_URL}}js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="{{STATIC_URL}}js/jquery.autocomplete-min.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}js/jquery.superlink.js"></script>
+    {% block footer_js %}{% endblock %}
+  </body>
+</html>

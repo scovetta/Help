@@ -1,0 +1,8 @@
+.DS_Store
+*.py[co]
+*.pot
+*.log
+project
+settings/settings-*private.ini
+.settings
+doc/sphinx/build
