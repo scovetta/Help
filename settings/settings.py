@@ -78,6 +78,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'pybb.middleware.PybbMiddleware',
 
 )
 
@@ -91,6 +92,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.auth', #this is required for admin
     'django.core.context_processors.csrf', #necessary for csrf protection
 
+)
+
+CONTEXT_PROCESSORS += (
+    'pybb.context_processors.processor',
 )
 
 INSTALLED_APPS = (
@@ -113,6 +118,10 @@ INSTALLED_APPS = (
     'tagging',
     'help.lib',
     'help.core',
+    'pybb',
+    'pytils',
+    'sorl.thumbnail',
+    'pure_pagination',
 )
 
 # Automatically import applications

@@ -47,4 +47,5 @@ if settings.DEBUG:
 
 # Default URL patterns
 urlpatterns += patterns('', (r'', include('help.core.urls')))
+urlpatterns += patterns('', (r'^forum/', include('pybb.urls', namespace='pybb')))
 
